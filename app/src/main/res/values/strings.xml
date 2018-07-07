@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">todo-app</string>
+    <string name="btn_todo_fragment">Todo</string>
+    <string name="btn_done_fragment">Done</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_del">Del</string>
 </resources>
