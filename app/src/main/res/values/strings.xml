@@ -4,4 +4,7 @@
     <string name="btn_done_fragment">Done</string>
     <string name="btn_add">Add</string>
     <string name="btn_del">Del</string>
+    <string name="title">Title</string>
+    <string name="register_day">등록일</string>
+
 </resources>
