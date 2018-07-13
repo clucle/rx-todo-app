@@ -11,6 +11,9 @@ import com.github.clucle.todo_app.R;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHolder> {
 
   private ArrayList<String> mDataSet;
@@ -37,11 +40,12 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
-    public TextView title;
+    @BindView(R.id.text_view_title)
+    TextView title;
 
     public ViewHolder(View itemView) {
       super(itemView);
-      title = itemView.findViewById(R.id.text_view_title);
+      ButterKnife.bind(this, itemView);
     }
   }
 }
