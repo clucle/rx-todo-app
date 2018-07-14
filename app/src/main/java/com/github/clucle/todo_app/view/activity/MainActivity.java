@@ -1,5 +1,6 @@
 package com.github.clucle.todo_app.view.activity;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -20,11 +21,11 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainActivityPresenter.View {
 
-  private MainActivityPresenter mainActivityPresenetr;
+  private MainActivityPresenter mainActivityPreseneter;
   private final String TAG = "[TODO_APP]";
 
-  @BindView(R.id.layout_top_bar)
-  LinearLayout layoutTopBar;
+  @BindView(R.id.constraint_layout_main)
+  ConstraintLayout constraintLayoutMain;
   @BindView(R.id.top_nav_btn_todo)
   Button btnTodo;
   @BindView(R.id.top_nav_btn_done)
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
     setContentView(R.layout.activity_main);
 
     ButterKnife.bind(this);
-    mainActivityPresenetr = new MainActivityPresenter(this);
+    mainActivityPreseneter = new MainActivityPresenter(this);
 
     vpMain.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
     vpMain.setOffscreenPageLimit(1);
@@ -58,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
       int i = 0;
       while (i < 2) {
         if (tag == i) {
-          layoutTopBar.findViewWithTag(i).setSelected(true);
+          constraintLayoutMain.findViewWithTag(i).setSelected(true);
         } else {
-          layoutTopBar.findViewWithTag(i).setSelected(false);
+          constraintLayoutMain.findViewWithTag(i).setSelected(false);
         }
         i++;
       }
