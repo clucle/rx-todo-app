@@ -3,6 +3,7 @@ package com.github.clucle.todo_app.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import com.github.clucle.todo_app.R;
 import com.github.clucle.todo_app.presenter.TodoPresenter;
 import com.github.clucle.todo_app.view.adapter.TodoListAdapter;
+import com.github.clucle.todo_app.view.utils.VerticalSpaceItemDecoration;
 
 import java.util.ArrayList;
 
@@ -57,6 +59,10 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
 
     recyclerViewTodo.setLayoutManager(mLayoutManager);
     recyclerViewTodo.setAdapter(mAdapter);
+
+    final int itemVerticalSpace = 24;
+    final RecyclerView.ItemDecoration itemDecoration = new VerticalSpaceItemDecoration(itemVerticalSpace);
+    recyclerViewTodo.addItemDecoration(itemDecoration);
 
     btnAddTodo.setOnClickListener(addTodoListener);
 
