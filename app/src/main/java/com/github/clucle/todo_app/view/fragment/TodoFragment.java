@@ -17,8 +17,6 @@ import com.github.clucle.todo_app.view.adapter.TodoListAdapter;
 import com.github.clucle.todo_app.view.utils.VerticalSpaceItemDecoration;
 import com.jakewharton.rxbinding2.view.RxView;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -32,8 +30,6 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
   FloatingActionButton fabTodoAdd;
 
   private RecyclerView.Adapter mAdapter;
-  private ArrayList<String> mDataSet;
-
   private Unbinder unbinder;
   private TodoPresenter todoPresenter;
 
@@ -52,13 +48,8 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
 
     unbinder = ButterKnife.bind(this, view);
 
-    mDataSet = new ArrayList<>();
-    for (int i = 0; i < 100; i++) {
-      mDataSet.add("hi : " + i);
-    }
-
     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-    mAdapter = new TodoListAdapter(mDataSet);
+    mAdapter = new TodoListAdapter(todoPresenter.getTodoList());
     recyclerViewTodo.setHasFixedSize(false);
 
     recyclerViewTodo.setLayoutManager(mLayoutManager);
@@ -70,9 +61,8 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
 
     mDisposable.add(
       RxView.clicks(fabTodoAdd).subscribe(aVoid -> {
-        mDataSet.add("lol");
-        mAdapter.notifyItemInserted(mDataSet.size() - 1);
-        mAdapter.notifyDataSetChanged();
+        // It may be show modal and get String
+        todoPresenter.addTodoItem("lol");
       })
     );
     return view;
@@ -83,5 +73,11 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
     super.onDestroyView();
     unbinder.unbind();
     mDisposable.dispose();
+  }
+
+  @Override
+  public void notifyAddTodoItem(int sz) {
+    mAdapter.notifyItemInserted(sz);
+    mAdapter.notifyDataSetChanged();
   }
 }
