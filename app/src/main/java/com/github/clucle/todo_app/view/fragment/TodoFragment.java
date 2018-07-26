@@ -15,12 +15,14 @@ import com.github.clucle.todo_app.R;
 import com.github.clucle.todo_app.presenter.TodoPresenter;
 import com.github.clucle.todo_app.view.adapter.TodoListAdapter;
 import com.github.clucle.todo_app.view.utils.VerticalSpaceItemDecoration;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class TodoFragment extends Fragment implements TodoPresenter.View {
 
@@ -34,6 +36,8 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
 
   private Unbinder unbinder;
   private TodoPresenter todoPresenter;
+
+  private CompositeDisposable mDisposable = new CompositeDisposable();
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,24 +68,20 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
     final RecyclerView.ItemDecoration itemDecoration = new VerticalSpaceItemDecoration(itemVerticalSpace);
     recyclerViewTodo.addItemDecoration(itemDecoration);
 
-    fabTodoAdd.setOnClickListener(addTodoListener);
-
+    mDisposable.add(
+      RxView.clicks(fabTodoAdd).subscribe(aVoid -> {
+        mDataSet.add("lol");
+        mAdapter.notifyItemInserted(mDataSet.size() - 1);
+        mAdapter.notifyDataSetChanged();
+      })
+    );
     return view;
   }
-
-
-  View.OnClickListener addTodoListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-      mDataSet.add("lol");
-      mAdapter.notifyItemInserted(mDataSet.size() - 1);
-      mAdapter.notifyDataSetChanged();
-    }
-  };
 
   @Override
   public void onDestroyView() {
     super.onDestroyView();
     unbinder.unbind();
+    mDisposable.dispose();
   }
 }
