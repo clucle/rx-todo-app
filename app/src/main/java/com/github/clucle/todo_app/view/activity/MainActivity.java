@@ -1,15 +1,13 @@
 package com.github.clucle.todo_app.view.activity;
 
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.github.clucle.todo_app.R;
 import com.github.clucle.todo_app.view.fragment.DoneFragment;
@@ -26,10 +24,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
 
   @BindView(R.id.constraint_layout_main)
   ConstraintLayout constraintLayoutMain;
-  @BindView(R.id.top_nav_btn_todo)
-  Button btnTodo;
-  @BindView(R.id.top_nav_btn_done)
-  Button btnDone;
+  @BindView(R.id.tab_layout_main)
+  TabLayout tabLayoutMain;
   @BindView(R.id.vp_main)
   ViewPager vpMain;
 
@@ -45,31 +41,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
     vpMain.setOffscreenPageLimit(1);
     vpMain.setCurrentItem(0);
 
-    btnTodo.setTag(0);
-    btnDone.setTag(1);
-    btnTodo.setOnClickListener(movePageListener);
-    btnDone.setOnClickListener(movePageListener);
+    tabLayoutMain.setupWithViewPager(vpMain);
   }
 
-  View.OnClickListener movePageListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-      int tag = (int) v.getTag();
-
-      int i = 0;
-      while (i < 2) {
-        if (tag == i) {
-          constraintLayoutMain.findViewWithTag(i).setSelected(true);
-        } else {
-          constraintLayoutMain.findViewWithTag(i).setSelected(false);
-        }
-        i++;
-      }
-      vpMain.setCurrentItem(tag);
-    }
-  };
-
   private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+    final int PAGE_COUNT = 2;
+    private String tabTitles[] = new String[] { "Todo", "Done" };
+
     ViewPagerAdapter(FragmentManager fm) {
       super(fm);
     }
@@ -88,7 +67,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityPrese
 
     @Override
     public int getCount() {
-      return 2;
+      return PAGE_COUNT;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+      return tabTitles[position];
     }
   }
 }
