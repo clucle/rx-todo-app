@@ -1,7 +1,5 @@
 package com.github.clucle.todo_app.entity;
 
-import java.text.SimpleDateFormat;
-
 public class Done extends Todo {
   private String doneDate;
 

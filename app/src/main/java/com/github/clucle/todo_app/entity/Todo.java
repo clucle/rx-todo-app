@@ -1,7 +1,5 @@
 package com.github.clucle.todo_app.entity;
 
-import java.text.SimpleDateFormat;
-
 public class Todo {
   private String title;
   private String registerDate;
