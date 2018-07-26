@@ -5,11 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.github.clucle.todo_app.R;
 import com.github.clucle.todo_app.presenter.TodoPresenter;
@@ -20,7 +24,6 @@ import com.jakewharton.rxbinding2.view.RxView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.disposables.CompositeDisposable;
 
 public class TodoFragment extends Fragment implements TodoPresenter.View {
 
@@ -33,7 +36,8 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
   private Unbinder unbinder;
   private TodoPresenter todoPresenter;
 
-  private CompositeDisposable mDisposable = new CompositeDisposable();
+  private AlertDialog.Builder builder;
+  private EditText builderInput;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,10 +63,10 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
     final RecyclerView.ItemDecoration itemDecoration = new VerticalSpaceItemDecoration(itemVerticalSpace);
     recyclerViewTodo.addItemDecoration(itemDecoration);
 
-    mDisposable.add(
+    todoPresenter.getDisposable().add(
         RxView.clicks(fabTodoAdd).subscribe(aVoid -> {
-          // It may be show modal and get String
-          todoPresenter.addTodoItem("lol");
+          initBuilder();
+          builder.show();
         })
     );
     return view;
@@ -72,7 +76,27 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
   public void onDestroyView() {
     super.onDestroyView();
     unbinder.unbind();
-    mDisposable.dispose();
+    todoPresenter.getDisposable().dispose();
+  }
+
+  private void initBuilder() {
+    if (getActivity() != null) {
+      builder = new AlertDialog.Builder(getActivity());
+      builder.setTitle("TODO 목록 추가하기");
+      builderInput = new EditText(getActivity());
+      builderInput.setInputType(InputType.TYPE_CLASS_TEXT);
+      builder.setView(builderInput);
+      builder.setPositiveButton("OK", (dialog, which) -> {
+        String title = builderInput.getText().toString();
+        if (title.trim().equals("")) {
+          Toast.makeText(getActivity(), "공백을 넣으면 어뜨켕!", Toast.LENGTH_LONG).show();
+          dialog.cancel();
+        } else {
+          todoPresenter.addTodoItem(title);
+        }
+      });
+      builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+    }
   }
 
   @Override
