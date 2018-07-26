@@ -60,10 +60,10 @@ public class TodoFragment extends Fragment implements TodoPresenter.View {
     recyclerViewTodo.addItemDecoration(itemDecoration);
 
     mDisposable.add(
-      RxView.clicks(fabTodoAdd).subscribe(aVoid -> {
-        // It may be show modal and get String
-        todoPresenter.addTodoItem("lol");
-      })
+        RxView.clicks(fabTodoAdd).subscribe(aVoid -> {
+          // It may be show modal and get String
+          todoPresenter.addTodoItem("lol");
+        })
     );
     return view;
   }
